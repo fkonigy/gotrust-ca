@@ -10,8 +10,11 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/", controllers.HomeController).Methods("GET")
-	r.HandleFunc("/cas", controllers.CasController).Methods("GET")
+	r.HandleFunc("/", controllers.Home)
+	r.HandleFunc("/cas", controllers.Cas)
+	r.HandleFunc("/ca/{id:[0-9]+}", controllers.ShowCa)
+	r.HandleFunc("/ca/new", controllers.NewCa)
+	r.HandleFunc("/cas/", controllers.CreateCa)
 
 	// TODO: create a Server and use with data from config file, instead of
 	// using http.ListenAndServer.
