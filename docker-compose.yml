@@ -1,0 +1,81 @@
+version: '2'
+services:
+  proxy:
+    image: nginx
+    container_name: gotrust-proxy
+    volumes:
+      -
+    ports:
+      - "80:80"
+  db:
+    image: postgresql
+    container_name: gotrust-db
+    ports:
+      - "5432:5432"
+    volumes:
+      -
+  redis:
+    image: redis
+    container_name: gotrust-redis
+    ports:
+      - ":"
+  rabbitmq:
+    image: rabbitmq
+    container_name: gotrust-messaging
+    ports:
+      - ":"
+  auth:
+    build: ./service/auth
+    image: gotrust/auth
+    container_name: gotrust-auth
+    depends_on:
+      - proxy
+      - db
+      - redis
+      - gotrust-messaging
+    links:
+      - db
+  cert:
+    build: ./serice/cert
+    image: "gotrust/cert"
+    container_name: "gotrust-cert"
+    depsnds_on:
+      - proxy
+      - db
+      - redis
+      - gotrust-messaging
+    links:
+      - db
+  crl:
+    build: ./service/crl
+    image: gotrust/crl
+    container_name: gotrust-crl
+    depends_on:
+      - proxy
+      - db
+      - redis
+      - gotrust-messaging
+    links:
+      - db
+  crypto:
+    build: ./service/crypto
+    image: gotrust/crypto
+    container_name: gotrust-crypto
+    depends_on:
+      - proxy
+      - db
+      - redis
+      - gotrust-messaging
+    links:
+      - db
+  ocsp:
+    build: ./service/ocsp
+    image: gotrust/ocsp
+    container_name: gotrust-ocsp
+    depends_on:
+      - proxy
+      - db
+      - redis
+      - gotrust-messaging
+    links:
+      - db

@@ -1,0 +1,8 @@
+{
+  "db_host": "",
+  "db_user": "",
+  "db_password": "",
+  "pkcs11_lib_path": "",
+  "slot_id": "",
+  "slot_pin": "",
+}
